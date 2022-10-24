@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import WebApp from './WebApp'
+import REPL from './REPL'
 
 function App() {
   return (
@@ -9,7 +9,7 @@ function App() {
       <header className="App-header">
         Welcome to our application!
       </header>
-      <WebApp />
+      <REPL />
     </div>
   );
 
