@@ -1,32 +1,76 @@
 import { validateHeaderValue } from 'http';
 import React, { useState, Dispatch, SetStateAction } from 'react';
-
-
+import './REPL.css'
 export const TEXT_submit_button_accessible_name = "submit button"
 export const TEXT_submit_button_text = "Submit!"
+export const TEXT_input_button_accessible_name = "input button"
 
-function ReplHistory() {
-  return (
-    <div className="repl-history">
-    </div>
-  )
+
+
+var commandDict = new Map<string, Function>(); 
+addCommandToDict("get", ()=> "get");
+addCommandToDict("stats", ()=> "stats");
+
+
+function addCommandToDict(command : string, funct : Function) {
+  commandDict.set(command, funct)
 }
+
+
+function CommandOutput(command : string) {
+  const commandArgs = command.trim().split(' ');
+  const comm = commandArgs[0];
+  if (commandDict.has(comm)) {
+    const myFunc = commandDict.get(comm);
+  
+    if (myFunc == undefined) {
+      return commandArgs[0] + "'s function is undefined."
+    }
+    else {
+      return myFunc(comm);
+    }
+  
+  }
+  else {
+    return commandArgs[0] + " is undefined."
+  }
+}
+
+
+function CommandLog({command}: ReplHistoryProps){
+  const output = CommandOutput(command);
+  const label: string = output.endsWith("undefined.") ? 'Valid Command' : 'Invalid Command';
+
+  return (
+    <div className="command-log"
+    aria-label ={label}>
+      <p>Command: {command}</p>
+      <p>Output: {output}</p>
+    </div>
+  );  
+}
+
 // TO DO: OldCommand to map commands in repl-history
 
+interface ReplHistoryProps {
+  command: string
+}
+
 interface ReplInputProps {
-  value: string,
-  setValue: Dispatch<SetStateAction<string>>,
+  command: string,
+  setCommand: Dispatch<SetStateAction<string>>,
   ariaLabel: string
 }
 
-function ReplInput({value, setValue, ariaLabel}: ReplInputProps) {
+function ReplInput({command, setCommand, ariaLabel}: ReplInputProps) {
   return (
-    <input value={value}
-            onChange={(ev) => setValue(ev.target.value)}
+    <input value={command}
+            onChange={(ev) => setCommand(ev.target.value)}
             aria-label={ariaLabel}
             className="repl-command-box"
             placeholder="Enter command here!"
-            ></input>
+            >
+            </input>
   )
 }
 
@@ -35,18 +79,18 @@ interface NewCommandProps {
 }
 
 function NewCommand({addCommand}: NewCommandProps) {
-  const [textValue, setTextValue] = useState('');
+  const [input, setInputValue] = useState('');
   return (
     <div className="new-command">
       <div className="repl-input">
-        <ReplInput value={textValue} setValue={setTextValue} ariaLabel='mock it'/>
+        <ReplInput command={input} setCommand={setInputValue} ariaLabel='mock it'/>
       </div>
       <div>
         <button onClick={() => {
-          addCommand(textValue)
-          setTextValue('')
+          addCommand(input)
+          setInputValue('')
           }}
-          aria-label={TEXT_submit_button_accessible_name}>
+          aria-label={TEXT_input_button_accessible_name}>
           {TEXT_submit_button_text}
         </button>
       </div>
@@ -54,11 +98,16 @@ function NewCommand({addCommand}: NewCommandProps) {
   )
 }
 
+
 export default function REPL() {
   const [commands, setCommands] = useState<string[]>([]);
     return (
-      <div className="repl">
-        <ReplHistory></ReplHistory>
+      <div className="App">
+        {commands.map( (command,commandKey) => 
+        <CommandLog           
+          command={command}
+          key={commandKey} />)}
+
         <NewCommand 
           addCommand={(command: string) => {
             const newCommands = commands.slice();

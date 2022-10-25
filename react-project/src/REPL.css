@@ -1,41 +1,34 @@
-/*
-  This is a reasonable starting point for the CSS in Sprint 1.
-  Positioning in CSS can sometimes be annoying to manage, so we've opted to 
-  give you this starter CSS. Feel free to modify it as you wish, though.
-*/
+.App {
+    text-align: center;
+    background-color: #6dbbf6;
+    max-height: 100%; 
+  }
 
-.title {
-    font-family:Verdana, Geneva, Tahoma, sans-serif
-}
-
-.body {
-    background-color:darkslateblue;
-}
-
-.repl {
-    position:relative;
-    min-height:95vh;    
-}
-
-.repl-history {      
-    height:85vh;   
+/* .command-log {
+    height:50vh;   
     margin: auto;
     display: block;
-    overflow: scroll;    
+    overflow: scroll;  
+    position: 'static';
 }
 
-.repl-input {        
-    margin: auto;    
-    height:10vh;
-}
 .repl-command-box {
-    width: 90%;            
+    width: 25%;            
     margin: auto;
     display: block;
-}
+    position: 'absolute';
+    bottom:10%;
+    left:50%;
+} */
 
-button {
-    margin: auto;
-    display: block;
-}
 
+
+
+
+
+
+/* submitButton: {
+    position: 'absolute',
+    bottom:0,
+    left:0,
+} */
