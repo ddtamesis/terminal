@@ -8,13 +8,37 @@ export const TEXT_input_button_accessible_name = "input button"
 
 
 var commandDict = new Map<string, Function>(); 
-addCommandToDict("get", ()=> "get");
+addCommandToDict("get", getCommand);
 addCommandToDict("stats", ()=> "stats");
 
 
 function addCommandToDict(command : string, funct : Function) {
   commandDict.set(command, funct)
 }
+
+// TODO: write get command function w stacked promises. remember to start server before trying to run this
+function getCommand(input: string) {
+  const inputArgs = input.split(' ');
+  const inputFileName = inputArgs[1];
+  /*
+  const loadedFilePath = fetch("localhost:3232/loadcsv?filepath=" + inputFileName)
+  .then(loadResponse => loadResponse.json())
+  .then(responseObject => console.log(responseObject.filepath))
+
+  const fileContent = fetch("localhost:3232/getcsv")
+    .then(getResponse => getResponse.json())
+    .then(responseObject => console.log(responseObject.data));
+  console.log(fileContent)
+  */
+
+  const fileContent = fetch("localhost:3232/loadcsv?filepath=" + inputFileName)
+  .then(loadResponse => fetch("localhost:3232/getcsv"))
+  .then(getResponse => getResponse.json())
+  .then(responseObject => responseObject);
+
+  console.log(fileContent);
+}
+
 
 
 function CommandOutput(command : string) {
@@ -115,6 +139,7 @@ export default function REPL() {
             setCommands(newCommands)
           }}
         />
+        
       </div>
     );
   }
