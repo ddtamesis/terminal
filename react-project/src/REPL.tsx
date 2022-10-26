@@ -31,12 +31,11 @@ function getCommand(input: string) {
   console.log(fileContent)
   */
 
-  const fileContent = fetch("localhost:3232/loadcsv?filepath=" + inputFileName)
-  .then(loadResponse => fetch("localhost:3232/getcsv"))
+  const fileContent = fetch("http://localhost:3232/loadcsv?filepath=" + inputFileName)
+  .then(loadResponse => fetch("http://localhost:3232/getcsv"))
   .then(getResponse => getResponse.json())
-  .then(responseObject => responseObject);
-
-  console.log(fileContent);
+  .then(responseObject => responseObject)
+  .catch(err => console.log(err))
 }
 
 
