@@ -1,34 +1,33 @@
-.App {
-    text-align: center;
-    background-color: #6dbbf6;
-    max-height: 100%; 
-  }
+.repl {
+    position:relative;
+    background-color:white;
+    min-height:95vh;    
+}
 
-/* .command-log {
-    height:50vh;   
+.repl-history {      
+    height:85vh;   
     margin: auto;
     display: block;
-    overflow: scroll;  
-    position: 'static';
+    overflow: scroll;   
+    text-align: left; 
+}
+
+.new-command-input {
+    background-color:#6dbbf6;
+}
+
+.repl-input {        
+    margin: auto;    
+    height:5vh;
 }
 
 .repl-command-box {
-    width: 25%;            
+    width: 90%;            
+    margin: auto;
+    vertical-align: middle;
+}
+
+button {
     margin: auto;
     display: block;
-    position: 'absolute';
-    bottom:10%;
-    left:50%;
-} */
-
-
-
-
-
-
-
-/* submitButton: {
-    position: 'absolute',
-    bottom:0,
-    left:0,
-} */
+}

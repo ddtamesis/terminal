@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        Welcome to our application!
+        Welcome to our terminal!
       </header>
       <REPL />
     </div>
