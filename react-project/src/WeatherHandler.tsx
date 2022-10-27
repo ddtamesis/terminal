@@ -1,4 +1,4 @@
-import { REPLFunction } from "./ReplFunctions";
+import { REPLFunction } from "./REPLInterface";
 
 /**
  * A REPLFunction which Returns a promise containing the weather output temperature, 

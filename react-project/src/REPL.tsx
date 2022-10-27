@@ -1,7 +1,8 @@
 import { validateHeaderValue } from 'http';
-import { REPLFunction } from './ReplFunctions';
-import { getCommand } from './ReplFunctions';
+import { REPLFunction } from './REPLInterface';
+import { getHandler } from './GetHandler';
 import { weatherHandler } from './WeatherHandler';
+import { statsHandler } from './StatsHandler';
 
 import React, { useState, Dispatch, SetStateAction } from 'react';
 import './REPL.css'
@@ -11,8 +12,9 @@ export const TEXT_input_button_accessible_name = "input button"
 
 
 var commandDict = new Map<string, REPLFunction>(); 
-addCommandToDict("get", getCommand);
-addCommandToDict("stats", ()=> "stats");
+
+addCommandToDict("get", getHandler);
+addCommandToDict("stats", statsHandler);
 addCommandToDict("weather", weatherHandler);
 
 
@@ -20,63 +22,43 @@ function addCommandToDict(command : string, funct : REPLFunction) {
   commandDict.set(command, funct)
 }
 
-
-  /*
-  const loadedFilePath = fetch("localhost:3232/loadcsv?filepath=" + inputFileName)
-  .then(loadResponse => loadResponse.json())
-  .then(responseObject => console.log(responseObject.filepath))
-
-  const fileContent = fetch("localhost:3232/getcsv")
-    .then(getResponse => getResponse.json())
-    .then(responseObject => console.log(responseObject.data));
-  console.log(fileContent)
-  */
-
-  // const fileContent = fetch("http://localhost:3232/loadcsv?filepath=" + inputFileName)
-  // .then(loadResponse => fetch("http://localhost:3232/getcsv"))
-  // .then(getResponse => getResponse.json())
-  // .then(responseObject => responseObject)
-  // .catch(err => console.log(err))
-
-
-
-
-function CommandOutput(command : string) {
-  const args = command.trim().split(' ');
-  const comm = args[0];
-  const commandArgs = args.slice(1);
+/**
+ * Returns a string wrapped inside a promise that represents 
+ * the output for the given command
+ */
+function CommandOutput(command : string) : Promise<string> {
+  const args : string[] = command.trim().split(' ');
+  const comm : string = args[0];
+  const commandArgs : string[] = args.slice(1);
 
   if (commandDict.has(comm)) {
-    const myFunc = commandDict.get(comm);
+    const myFunc : Function | undefined = commandDict.get(comm);
   
     if (myFunc == undefined) {
-      return comm + "'s function is undefined."
+      return new Promise(resolve => {
+  
+          resolve(comm + "'s function is undefined.")})
     }
+
     else {
       return myFunc(commandArgs);
     }
   
   }
   else {
-    return comm + " is undefined."
+    return new Promise(resolve => {
+          resolve(comm + " is undefined.")})
+    }
   }
-}
 
 
-function CommandLog({command}: ReplHistoryProps) {
-  const outputProm: Promise<string> = CommandOutput(command)
-  let output: string = "";
-  outputProm.then((value: string) => {
-    output = value
-  });
-  console.log(output);
-  // commented this out bc it is causing errors rn
-  // const label: string = output.endsWith("undefined.") ? 'Valid Command' : 'Invalid Command';
+
+function UpdateHistory({resultPair}: ReplHistoryProps) {
   
   return (
-    <div className="command-log">
-      <p>Command: {command}</p>
-      <p>Output: {output}</p>
+    <div aria-label = "later" >
+      <p>Command: {resultPair[0]}</p>
+      <p>Output: {resultPair[1]}</p>
     </div>
   );  
 }
@@ -84,7 +66,7 @@ function CommandLog({command}: ReplHistoryProps) {
 // TO DO: OldCommand to map commands in repl-history
 
 interface ReplHistoryProps {
-  command: string
+  resultPair: string[]
 }
 
 interface ReplInputProps {
@@ -109,8 +91,10 @@ interface NewCommandProps {
   addCommand: (command: string) => any; //change to void later
 }
 
+
 function NewCommand({addCommand}: NewCommandProps) {
   const [input, setInputValue] = useState('');
+
   return (
     <div className="new-command">
       <div className="repl-input">
@@ -131,22 +115,29 @@ function NewCommand({addCommand}: NewCommandProps) {
 
 
 export default function REPL() {
-  const [commands, setCommands] = useState<string[]>([]);
-    return (
-      <div className="App">
-        {commands.map( (command,commandKey) => 
-        <CommandLog           
-          command={command}
-          key={commandKey} />)}
+  const [resultPairs, setResultPairs] = useState<string[][]>([]);
 
-        <NewCommand 
+
+    return (
+      <div className="App"> 
+          <div className = "History">
+          {resultPairs.map( (resultPair,key) => 
+          <UpdateHistory           
+            resultPair={resultPair}
+            key={key} />)}
+      
+  
+        <NewCommand
           addCommand={(command: string) => {
-            const newCommands = commands.slice();
-            newCommands.push(command)
-            setCommands(newCommands)
+            const newResultPairs = resultPairs.slice();
+            CommandOutput(command)
+              .then(resp=> newResultPairs.push([command, resp]))
+              .then(() => setResultPairs(newResultPairs))
           }}
         />
         
       </div>
+      </div>
     );
   }
+
