@@ -1,12 +1,13 @@
 import { validateHeaderValue } from 'http';
 import { getCommand } from './ReplFunctions';
+import { weatherHandler } from './WeatherHandler';
 
 import React, { useState, Dispatch, SetStateAction } from 'react';
 import './REPL.css'
 export const TEXT_submit_button_accessible_name = "submit button"
 export const TEXT_submit_button_text = "Submit!"
 export const TEXT_input_button_accessible_name = "input button"
-import { weatherHandler } from './WeatherHandler';
+
 
 var commandDict = new Map<string, Function>(); 
 addCommandToDict("get", getCommand);
@@ -67,8 +68,7 @@ function CommandLog({command}: ReplHistoryProps){
   // const label: string = output.endsWith("undefined.") ? 'Valid Command' : 'Invalid Command';
 
   return (
-    <div className="command-log"
-    aria-label ={label}>
+    <div className="command-log">
       <p>Command: {command}</p>
       <p>Output: {output}</p>
     </div>

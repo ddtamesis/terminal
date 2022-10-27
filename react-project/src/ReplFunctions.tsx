@@ -1,6 +1,7 @@
-const URL = `http://localhost:3232/`
+const URL = `http://localhost:3230/`
 const CSVDirectory_Musa = "/Users/musatahir/cs32/sprint-3-dtamesis-mtahir1/sprint-2/data";
-const CSVDirectory_Dani = "/Users/kaka/cs32/sprint-3-dtamesis-mtahir1/sprint-2/data";
+const CSVDirectory_Dani = "/Users/kagit ska/cs32/sprint-3-dtamesis-mtahir1/sprint-2/data";
+
 
 
 /**
@@ -15,7 +16,7 @@ const CSVDirectory_Dani = "/Users/kaka/cs32/sprint-3-dtamesis-mtahir1/sprint-2/d
     (args: Array<string>): Promise<string>
 }
 
-export let getCommand : REPLFunction;
+let getCommand : REPLFunction;
 
 getCommand = function(args: Array<string>): Promise<string>  {
 

@@ -1,6 +1,6 @@
 import { REPLFunction } from "./ReplFunctions";
 
-function weatherHandler(args: Array<string>): Promise<string> {
+let weatherHandler: REPLFunction = (args: Array<string>): Promise<string> => {
     const lat: string = args[0];
     const lon: string = args[1];
     const promise: Promise<string> = fetch(`http://localhost:3232/weather?lat=${lat}&lon=${lon}`)
