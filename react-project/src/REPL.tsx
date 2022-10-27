@@ -1,4 +1,6 @@
 import { validateHeaderValue } from 'http';
+import { getCommand } from './ReplFunctions';
+
 import React, { useState, Dispatch, SetStateAction } from 'react';
 import './REPL.css'
 export const TEXT_submit_button_accessible_name = "submit button"
@@ -6,10 +8,8 @@ export const TEXT_submit_button_text = "Submit!"
 export const TEXT_input_button_accessible_name = "input button"
 import { weatherHandler } from './WeatherHandler';
 
-
-
 var commandDict = new Map<string, Function>(); 
-//addCommandToDict("get", getCommand);
+addCommandToDict("get", getCommand);
 addCommandToDict("stats", ()=> "stats");
 addCommandToDict("weather", weatherHandler);
 
