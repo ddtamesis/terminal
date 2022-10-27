@@ -1,4 +1,5 @@
 import { validateHeaderValue } from 'http';
+import { REPLFunction } from './ReplFunctions';
 import { getCommand } from './ReplFunctions';
 import { weatherHandler } from './WeatherHandler';
 
@@ -9,13 +10,13 @@ export const TEXT_submit_button_text = "Submit!"
 export const TEXT_input_button_accessible_name = "input button"
 
 
-var commandDict = new Map<string, Function>(); 
+var commandDict = new Map<string, REPLFunction>(); 
 addCommandToDict("get", getCommand);
 addCommandToDict("stats", ()=> "stats");
 addCommandToDict("weather", weatherHandler);
 
 
-function addCommandToDict(command : string, funct : Function) {
+function addCommandToDict(command : string, funct : REPLFunction) {
   commandDict.set(command, funct)
 }
 
@@ -62,11 +63,16 @@ function CommandOutput(command : string) {
 }
 
 
-function CommandLog({command}: ReplHistoryProps){
-  const output = CommandOutput(command);
+function CommandLog({command}: ReplHistoryProps) {
+  const outputProm: Promise<string> = CommandOutput(command)
+  let output: string = "";
+  outputProm.then((value: string) => {
+    output = value
+  });
+  console.log(output);
   // commented this out bc it is causing errors rn
   // const label: string = output.endsWith("undefined.") ? 'Valid Command' : 'Invalid Command';
-
+  
   return (
     <div className="command-log">
       <p>Command: {command}</p>
