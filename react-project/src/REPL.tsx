@@ -1,8 +1,8 @@
 import { validateHeaderValue } from 'http';
-import { REPLFunction } from './REPLInterface';
-import { getHandler } from './GetHandler';
-import { weatherHandler } from './WeatherHandler';
-import { statsHandler } from './StatsHandler';
+import { REPLFunction } from './handlers/REPLInterface';
+import { getHandler } from './handlers/GetHandler';
+import { weatherHandler } from './handlers/WeatherHandler';
+import { statsHandler } from './handlers/StatsHandler';
 
 import React, { useState, Dispatch, SetStateAction } from 'react';
 import './REPL.css'
@@ -11,11 +11,13 @@ export const TEXT_submit_button_text = "Submit!"
 export const TEXT_input_button_accessible_name = "input button"
 
 
-var commandDict = new Map<string, REPLFunction>(); 
+let commandDict = new Map<string, REPLFunction>(); 
 
 addCommandToDict("get", getHandler);
 addCommandToDict("stats", statsHandler);
 addCommandToDict("weather", weatherHandler);
+
+let csvLoaded = false;
 
 
 function addCommandToDict(command : string, funct : REPLFunction) {
@@ -32,22 +34,21 @@ function CommandOutput(command : string) : Promise<string> {
   const commandArgs : string[] = args.slice(1);
 
   if (commandDict.has(comm)) {
-    const myFunc : Function | undefined = commandDict.get(comm);
-  
-    if (myFunc == undefined) {
-      return new Promise(resolve => {
-  
-          resolve(comm + "'s function is undefined.")})
-    }
+    const myFunc : REPLFunction | undefined = commandDict.get(comm);
 
-    else {
-      return myFunc(commandArgs);
+    if (myFunc == undefined) {
+      return Promise.resolve(comm + "'s function is undefined.")
     }
-  
-  }
-  else {
-    return new Promise(resolve => {
-          resolve(comm + " is undefined.")})
+    if (myFunc == getHandler) {
+      csvLoaded = true;
+    }
+    if (myFunc == statsHandler && !csvLoaded) {
+      return Promise.resolve('Please load a csv with "get <filepath>" before calling stats.')
+    }
+    
+    return myFunc(commandArgs);
+  } else {
+    return Promise.resolve(comm + " does not exist.");
     }
   }
 
