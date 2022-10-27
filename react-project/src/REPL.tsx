@@ -4,12 +4,14 @@ import './REPL.css'
 export const TEXT_submit_button_accessible_name = "submit button"
 export const TEXT_submit_button_text = "Submit!"
 export const TEXT_input_button_accessible_name = "input button"
+import { weatherHandler } from './WeatherHandler';
 
 
 
 var commandDict = new Map<string, Function>(); 
 //addCommandToDict("get", getCommand);
 addCommandToDict("stats", ()=> "stats");
+addCommandToDict("weather", weatherHandler);
 
 
 function addCommandToDict(command : string, funct : Function) {
@@ -61,7 +63,8 @@ function CommandOutput(command : string) {
 
 function CommandLog({command}: ReplHistoryProps){
   const output = CommandOutput(command);
-  const label: string = output.endsWith("undefined.") ? 'Valid Command' : 'Invalid Command';
+  // commented this out bc it is causing errors rn
+  // const label: string = output.endsWith("undefined.") ? 'Valid Command' : 'Invalid Command';
 
   return (
     <div className="command-log"
