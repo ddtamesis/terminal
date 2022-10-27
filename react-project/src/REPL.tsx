@@ -8,7 +8,7 @@ export const TEXT_input_button_accessible_name = "input button"
 
 
 var commandDict = new Map<string, Function>(); 
-addCommandToDict("get", getCommand);
+//addCommandToDict("get", getCommand);
 addCommandToDict("stats", ()=> "stats");
 
 
@@ -16,10 +16,7 @@ function addCommandToDict(command : string, funct : Function) {
   commandDict.set(command, funct)
 }
 
-// TODO: write get command function w stacked promises. remember to start server before trying to run this
-function getCommand(input: string) {
-  const inputArgs = input.split(' ');
-  const inputFileName = inputArgs[1];
+
   /*
   const loadedFilePath = fetch("localhost:3232/loadcsv?filepath=" + inputFileName)
   .then(loadResponse => loadResponse.json())
@@ -31,31 +28,33 @@ function getCommand(input: string) {
   console.log(fileContent)
   */
 
-  const fileContent = fetch("http://localhost:3232/loadcsv?filepath=" + inputFileName)
-  .then(loadResponse => fetch("http://localhost:3232/getcsv"))
-  .then(getResponse => getResponse.json())
-  .then(responseObject => responseObject)
-  .catch(err => console.log(err))
-}
+  // const fileContent = fetch("http://localhost:3232/loadcsv?filepath=" + inputFileName)
+  // .then(loadResponse => fetch("http://localhost:3232/getcsv"))
+  // .then(getResponse => getResponse.json())
+  // .then(responseObject => responseObject)
+  // .catch(err => console.log(err))
+
 
 
 
 function CommandOutput(command : string) {
-  const commandArgs = command.trim().split(' ');
-  const comm = commandArgs[0];
+  const args = command.trim().split(' ');
+  const comm = args[0];
+  const commandArgs = args.slice(1);
+
   if (commandDict.has(comm)) {
     const myFunc = commandDict.get(comm);
   
     if (myFunc == undefined) {
-      return commandArgs[0] + "'s function is undefined."
+      return comm + "'s function is undefined."
     }
     else {
-      return myFunc(comm);
+      return myFunc(commandArgs);
     }
   
   }
   else {
-    return commandArgs[0] + " is undefined."
+    return comm + " is undefined."
   }
 }
 
@@ -98,7 +97,7 @@ function ReplInput({command, setCommand, ariaLabel}: ReplInputProps) {
 }
 
 interface NewCommandProps {
-  addCommand: (command: string) => any
+  addCommand: (command: string) => any; //change to void later
 }
 
 function NewCommand({addCommand}: NewCommandProps) {
