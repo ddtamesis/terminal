@@ -16,7 +16,7 @@ const CSVDirectory_Dani = "/Users/kagit ska/cs32/sprint-3-dtamesis-mtahir1/sprin
     (args: Array<string>): Promise<string>
 }
 
-let getCommand : REPLFunction;
+export let getCommand : REPLFunction;
 
 getCommand = function(args: Array<string>): Promise<string>  {
 
