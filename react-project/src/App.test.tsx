@@ -1,9 +1,10 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import App from './App';
+import { TEXT_app_header_accessible_name } from './App';
 
-test('renders learn react link', () => {
+test('renders welcome header', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  const headerElement = screen.getByRole("banner", {name: TEXT_app_header_accessible_name});
+  expect(headerElement).toBeInTheDocument();
 });
