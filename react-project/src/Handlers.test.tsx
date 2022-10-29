@@ -69,23 +69,22 @@ test("get doesn't work with invalid csv", async () => {
  */
  test("correct stats returned", async () => {
     let promiseObjGet : Promise<string> = getHandler(["data/testing/test-basic.csv"])
-    let promiseObjStats : Promise<string> = statsHandler([])
-    return promiseObjStats.then((response: String) => expect(response).toBe("Rows: 4, Columns: 3"))
+    return promiseObjGet.then((response: String) => response)
+    .then(() => statsHandler([])).then((response: String) => expect(response).toBe("Rows: 4, Columns: 3"))
  }
 )
 
-/**
+/** 
  * Tests that stats correctly updates once you get another csv
  */
-//  test("correct stats returned after updating get", async () => {
-//     let promiseObjGet : Promise<string> = getHandler(["data/testing/test-basic.csv"])
-//     let promiseObjGet2 : Promise<string> = getHandler(["data/testing/test-empty.csv"])
-//     let afterFirstGet = promiseObjGet.then((response: String) => response)
-//     let promiseObjStats : Promise<string> = promiseObjGet2.then((response: String) => response).then(statsHandler([]))
-//     return promiseObjStats.then((response: String) => expect(response).toBe("Rows: 0, Columns: 0"))
-//  }
-// )
+ test("correct stats returned after updating get", async () => {
+   let promiseObjGet : Promise<string> = getHandler(["data/testing/test-basic.csv"])
 
+   return promiseObjGet.then((response: String) => response)
+   .then(() => getHandler(["data/testing/test-empty.csv"]))
+   .then(() => statsHandler([])).then((response: String) => expect(response).toBe("Rows: 0, Columns: 0"))
+}
+)
 
 /**
  * Tests that stats only works once you load a valid csv 
