@@ -1,9 +1,16 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import REPL, { TEXT_input_box_accessible_name, TEXT_input_text_accessible_name, 
     TEXT_submit_button_accessible_name, TEXT_submit_button_text,
      TEXT_input_output_pair_accessible_name, TEXT_repl_command_history_accessible_name } from './REPL';
 import userEvent from '@testing-library/user-event';
+
+test('renders command history', () => {
+    render(<REPL/>);
+    const commandHistory = screen.getByLabelText(TEXT_repl_command_history_accessible_name);
+    expect(commandHistory).toBeInTheDocument();
+}
+)
 
 test('renders command input box', () => {
     render(<REPL/>);
@@ -25,6 +32,7 @@ test('submitting 1 successful get command', () => {
     userEvent.type(inputBox, 'get data/testing/test-basic.csv');
     userEvent.click(submitButton);
 
-    const inputOutputPair = screen.findByRole("group", {name: TEXT_input_output_pair_accessible_name + " " + 1});
+    const commandHistory = screen.getByLabelText(TEXT_repl_command_history_accessible_name);
+    const inputOutputPair = within(commandHistory).getByRole(/.*/, {name: TEXT_input_output_pair_accessible_name + " " + 1});
     expect(inputOutputPair).toBeInTheDocument();
 })
