@@ -25,18 +25,21 @@ test('renders submit button', () => {
     expect(buttonElement).toBeInTheDocument();
 })
 
-test('submitting 1 successful get command', async () => {
-    const inputBox = screen.getByRole("textbox", {name: TEXT_input_text_accessible_name});
-    const submitButton = screen.getByRole("button", {name: TEXT_submit_button_accessible_name});
+// test('submitting 1 successful get command', async () => {
+//     const inputBox = screen.getByRole("textbox", {name: TEXT_input_text_accessible_name});
+//     const submitButton = screen.getByRole("button", {name: TEXT_submit_button_accessible_name});
 
-    userEvent.type(inputBox, 'get data/testing/test-basic.csv');
-    userEvent.click(submitButton);
+//     userEvent.type(inputBox, 'get data/testing/test-basic.csv');
+//     userEvent.click(submitButton);
 
-    const commandHistory = await screen.findByRole(/.*/, {name: TEXT_repl_command_history_accessible_name});
-    const inputOutputPair = await within(commandHistory).findByRole(/.*/, {name: TEXT_input_output_pair_accessible_name + " " + 1});
-    expect(inputOutputPair).toBeInTheDocument();
-    cleanup();
-})
+//     const commandHistory = await screen.findByRole(/.*/, {name: TEXT_repl_command_history_accessible_name});
+//     const inputOutputPair = await within(commandHistory).findByRole(/.*/, {name: TEXT_input_output_pair_accessible_name});
+//     expect(inputOutputPair).toBeInTheDocument();
+
+//     const outputElement: HTMLElement = await within(inputOutputPair).findByRole("output")
+//     expect(outputElement.innerHTML).toBe('Output: [["Joe","12","Male"],["Sue","1","Female"],["Derek","17","Male"],["Quinn","20","Female"]]')
+// })
+
 
 test('submitting get followed by stats', async () => {
     const inputBox = screen.getByRole("textbox", {name: TEXT_input_text_accessible_name});
@@ -44,14 +47,17 @@ test('submitting get followed by stats', async () => {
 
     userEvent.type(inputBox, 'get data/testing/test-basic.csv');
     userEvent.click(submitButton);
-    const commandHistory1 = await screen.findByLabelText(TEXT_repl_command_history_accessible_name);
-    const inputOutputPair1 = await within(commandHistory1).findByLabelText(TEXT_input_output_pair_accessible_name + " " + 2);
-    
     userEvent.type(inputBox, 'stats');
     userEvent.click(submitButton);
-    const commandHistory2 = await screen.findByLabelText(TEXT_repl_command_history_accessible_name);
-    const inputOutputPair2 = await within(commandHistory2).findByLabelText(TEXT_input_output_pair_accessible_name + " " + 3);
 
-    expect(inputOutputPair1).toBeInTheDocument();
-    expect(inputOutputPair2).toBeInTheDocument();
+    const commandHistory = await screen.findByRole(/.*/, {name: TEXT_repl_command_history_accessible_name});
+    let allInputOutputPairs = await within(commandHistory).findAllByRole(/.*/, {name: TEXT_input_output_pair_accessible_name})
+   
+    allInputOutputPairs.forEach(elt => {
+        expect(elt).toBeInTheDocument();
+    })
+    expect(allInputOutputPairs).toHaveLength(2);
+
+    const statsResult = allInputOutputPairs[1].innerHTML
+    expect(statsResult).toBe('Output: Rows: 4, Columns: 3')
 })
