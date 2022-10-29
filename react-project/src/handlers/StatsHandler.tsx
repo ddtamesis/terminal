@@ -23,6 +23,6 @@ statsHandler = function(args: Array<string>): Promise<string>  {
         return promise;
 
     } else {
-        return Promise.resolve('Invalid arguments. Please only enter stats')
+        return Promise.resolve("Invalid arguments. Please only enter 'stats'")
     }
 }

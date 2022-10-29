@@ -74,6 +74,7 @@ test("get doesn't work with invalid csv", async () => {
  }
 )
 
+
 /** 
  * Tests that stats correctly updates once you get another csv
  */
@@ -86,17 +87,18 @@ test("get doesn't work with invalid csv", async () => {
 }
 )
 
-/**
- * Tests that stats only works once you load a valid csv 
- */
+
 
 /**
  * Tests that stats doesn't work with too many arguments 
  */
 
-/**
- * Tests that stats doesn't work with too many arguments 
- */
+ test("stats doesn't work with too many arguments", async () => {
+    let promiseObjStats : Promise<string> = statsHandler(["ok"])
+    return promiseObjStats.then((response: String) => expect(response).toBe("Invalid arguments. Please only enter 'stats'"))
+ }
+)
+
 
 
 /**
@@ -104,10 +106,40 @@ test("get doesn't work with invalid csv", async () => {
  */
 
 /**
+ * Tests that stats doesn't work with too few arguments 
+ */
+
+ test("weather doesn't work with too few arguments", async () => {
+    let promiseObjWeather : Promise<string> = weatherHandler(["41.8268"])
+    return promiseObjWeather.then((response: String) => expect(response).toBe("Invalid arguments. Please enter weather <lat> <lon>"))
+}
+)
+
+/**
  * Tests that weather doesn't work with too many arguments
  */
 
+ test("weather doesn't work with too many arguments", async () => {
+    let promiseObjWeather : Promise<string> = weatherHandler(["41.8268", "-71.4029", "extra"])
+    return promiseObjWeather.then((response: String) => expect(response).toBe("Invalid arguments. Please enter weather <lat> <lon>"))
+}
+)
+
+/**
+ * Tests that weather works correctly with correct input
+ */
+
+ test("weather works with correct input", async () => {
+    let promiseObjWeather : Promise<string> = weatherHandler(["41.8268", "-71.4029"])
+    return promiseObjWeather.then((response: String) => expect(response).toBe(58))
+})
 
 
+/**
+ * Tests that weather outputs informative message with invalid coordinates
+ */
 
-
+ test("weather doesn't break for invalid coordinates", async () => {
+    let promiseObjWeather : Promise<string> = weatherHandler(["-200", "--5"])
+    return promiseObjWeather.then((response: String) => expect(response).toBe("Unable to retrieve the weather for those coordinates."))
+})
