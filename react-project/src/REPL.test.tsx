@@ -40,24 +40,26 @@ test('renders submit button', () => {
 //     expect(outputElement.innerHTML).toBe('Output: [["Joe","12","Male"],["Sue","1","Female"],["Derek","17","Male"],["Quinn","20","Female"]]')
 // })
 
+// test('submitting get followed by stats', async () => {
+//     const inputBox = screen.getByRole("textbox", {name: TEXT_input_text_accessible_name});
+//     const submitButton = screen.getByRole("button", {name: TEXT_submit_button_accessible_name});
 
-test('submitting get followed by stats', async () => {
+//     userEvent.type(inputBox, 'get data/testing/test-basic.csv');
+//     userEvent.click(submitButton);
+//     userEvent.type(inputBox, 'stats');
+//     userEvent.click(submitButton);
+
+//     const statsResult = await screen.findByText("Output: Rows: 4, Columns: 3")
+//     expect(statsResult).toBeInTheDocument()
+// })
+
+test('submitting stats without get', async () => {
     const inputBox = screen.getByRole("textbox", {name: TEXT_input_text_accessible_name});
     const submitButton = screen.getByRole("button", {name: TEXT_submit_button_accessible_name});
 
-    userEvent.type(inputBox, 'get data/testing/test-basic.csv');
-    userEvent.click(submitButton);
-    let allInputOutputPairs = await screen.findAllByRole(/.*/, {name: TEXT_input_output_pair_accessible_name})
-
     userEvent.type(inputBox, 'stats');
     userEvent.click(submitButton);
-    allInputOutputPairs = await screen.findAllByRole(/.*/, {name: TEXT_input_output_pair_accessible_name})
-   
-    allInputOutputPairs.forEach(elt => {
-        expect(elt).toBeInTheDocument();
-    })
-    expect(allInputOutputPairs).toHaveLength(2);
 
-    const statsResult = allInputOutputPairs[1].innerHTML
-    expect(statsResult).toBe('Output: Rows: 4, Columns: 3')
+    const statsResult = await screen.findByText('Output: Please load a csv with "get <filepath>" before calling stats.')
+    expect(statsResult).toBeInTheDocument()
 })
