@@ -47,11 +47,11 @@ test('submitting get followed by stats', async () => {
 
     userEvent.type(inputBox, 'get data/testing/test-basic.csv');
     userEvent.click(submitButton);
+    let allInputOutputPairs = await screen.findAllByRole(/.*/, {name: TEXT_input_output_pair_accessible_name})
+
     userEvent.type(inputBox, 'stats');
     userEvent.click(submitButton);
-
-    const commandHistory = await screen.findByRole(/.*/, {name: TEXT_repl_command_history_accessible_name});
-    let allInputOutputPairs = await within(commandHistory).findAllByRole(/.*/, {name: TEXT_input_output_pair_accessible_name})
+    allInputOutputPairs = await screen.findAllByRole(/.*/, {name: TEXT_input_output_pair_accessible_name})
    
     allInputOutputPairs.forEach(elt => {
         expect(elt).toBeInTheDocument();
