@@ -125,15 +125,6 @@ test("get doesn't work with invalid csv", async () => {
 }
 )
 
-/**
- * Tests that weather works correctly with correct input
- */
-
- test("weather works with correct input", async () => {
-    let promiseObjWeather : Promise<string> = weatherHandler(["41.8268", "-71.4029"])
-    return promiseObjWeather.then((response: String) => expect(response).toBe(58))
-})
-
 
 /**
  * Tests that weather outputs informative message with invalid coordinates
