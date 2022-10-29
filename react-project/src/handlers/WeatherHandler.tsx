@@ -12,8 +12,8 @@ export let weatherHandler: REPLFunction = (args: Array<string>): Promise<string>
         const lon: string = args[1];
         const promise: Promise<string> = fetch(`http://localhost:3232/weather?lat=${lat}&lon=${lon}`)
             .then(response => response.json())
-            .then(r => {
-                if (r.result === 'success') {
+            .then(r  => {
+                if (r.result=== 'success') {
                     return r.temperature;
                 } else {
                     // in this case, some error was thrown from the backend server

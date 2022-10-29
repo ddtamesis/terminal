@@ -5,6 +5,9 @@ import REPL from './REPL'
 
 export const TEXT_app_header_accessible_name = "welcome header"
 
+/**
+ * Parent component function that include our paimrary REPL component
+ */
 function App() {
   return (
     <div className="App">

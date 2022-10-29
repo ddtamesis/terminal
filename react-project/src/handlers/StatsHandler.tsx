@@ -3,6 +3,11 @@ const URL = `http://localhost:3232/`
 
 export let statsHandler : REPLFunction;
 
+/**
+ * A REPLFunction which Returns a promise containing the stats content (row/column count), 
+ * assuming the correct command is entered i.e 'stats'. 
+ * Otherwise, returns promise containing an error message
+ */
 statsHandler = function(args: Array<string>): Promise<string>  {
     if (args.length === 0) {
         const getCSVURL = `${URL}getcsv`;
