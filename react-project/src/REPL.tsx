@@ -19,7 +19,6 @@ addCommandToDict("stats", statsHandler);
 addCommandToDict("weather", weatherHandler);
 
 let csvLoaded = false;
-let inputSubmissionCount = 1;
 
 function addCommandToDict(command : string, funct : REPLFunction) {
   commandDict.set(command, funct)
@@ -102,8 +101,7 @@ interface ReplHistoryProps {
 function UpdateHistory({resultPair}: ReplHistoryProps) {
   const commandInput: string = resultPair[0];
   const output: string = resultPair[1];
-  const label = TEXT_input_output_pair_accessible_name + " " + inputSubmissionCount
-  inputSubmissionCount++;
+  const label = TEXT_input_output_pair_accessible_name
   return (
     <div className={"result-pair-"+commandInput} aria-label={label}>
       <p>Command: {commandInput}</p>

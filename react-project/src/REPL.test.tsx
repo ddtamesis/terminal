@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, within } from '@testing-library/react';
+import { cleanup, render, screen, within } from '@testing-library/react';
 import REPL, { TEXT_input_box_accessible_name, TEXT_input_text_accessible_name, 
     TEXT_submit_button_accessible_name, TEXT_submit_button_text,
      TEXT_input_output_pair_accessible_name, TEXT_repl_command_history_accessible_name } from './REPL';
@@ -32,9 +32,10 @@ test('submitting 1 successful get command', async () => {
     userEvent.type(inputBox, 'get data/testing/test-basic.csv');
     userEvent.click(submitButton);
 
-    const commandHistory = await screen.findByLabelText(TEXT_repl_command_history_accessible_name);
-    const inputOutputPair = await within(commandHistory).findByLabelText(TEXT_input_output_pair_accessible_name + " " + 1);
+    const commandHistory = await screen.findByRole(/.*/, {name: TEXT_repl_command_history_accessible_name});
+    const inputOutputPair = await within(commandHistory).findByRole(/.*/, {name: TEXT_input_output_pair_accessible_name + " " + 1});
     expect(inputOutputPair).toBeInTheDocument();
+    cleanup();
 })
 
 test('submitting get followed by stats', async () => {
@@ -43,12 +44,14 @@ test('submitting get followed by stats', async () => {
 
     userEvent.type(inputBox, 'get data/testing/test-basic.csv');
     userEvent.click(submitButton);
+    const commandHistory1 = await screen.findByLabelText(TEXT_repl_command_history_accessible_name);
+    const inputOutputPair1 = await within(commandHistory1).findByLabelText(TEXT_input_output_pair_accessible_name + " " + 2);
+    
     userEvent.type(inputBox, 'stats');
     userEvent.click(submitButton);
+    const commandHistory2 = await screen.findByLabelText(TEXT_repl_command_history_accessible_name);
+    const inputOutputPair2 = await within(commandHistory2).findByLabelText(TEXT_input_output_pair_accessible_name + " " + 3);
 
-    const commandHistory = await screen.findByLabelText(TEXT_repl_command_history_accessible_name);
-    const inputOutputPair1 = await within(commandHistory).findByLabelText(TEXT_input_output_pair_accessible_name + " " + 1);
-    const inputOutputPair2 = await within(commandHistory).findByLabelText(TEXT_input_output_pair_accessible_name + " " + 2);
     expect(inputOutputPair1).toBeInTheDocument();
     expect(inputOutputPair2).toBeInTheDocument();
 })
