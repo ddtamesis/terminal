@@ -9,24 +9,21 @@ export const TEXT_input_box_accessible_name = "command input box"
 export const TEXT_input_text_accessible_name = "your command input"
 export const TEXT_submit_button_accessible_name = "submit your command"
 export const TEXT_submit_button_text = "Submit!"
-export const TEXT_input_button_accessible_name = "input button"
 export const TEXT_input_output_pair_accessible_name = "your command and the outputted result"
 export const TEXT_repl_command_history_accessible_name = "command history"
 
 
 let commandDict = new Map<string, REPLFunction>(); 
-
 addCommandToDict("get", getHandler);
 addCommandToDict("stats", statsHandler);
 addCommandToDict("weather", weatherHandler);
 
 let csvLoaded = false;
+let inputSubmissionCount = 1;
 
 function addCommandToDict(command : string, funct : REPLFunction) {
   commandDict.set(command, funct)
 }
-
-
 
 interface ReplInputProps {
   commandWithArgs: string,
@@ -63,7 +60,7 @@ function NewCommand({addCommand}: NewCommandProps) {
         addCommand(input)
         setInputValue('')
         }}
-        aria-label={TEXT_input_button_accessible_name}>
+        aria-label={TEXT_submit_button_accessible_name}>
         {TEXT_submit_button_text}
       </button>
     </div>
@@ -105,8 +102,10 @@ interface ReplHistoryProps {
 function UpdateHistory({resultPair}: ReplHistoryProps) {
   const commandInput: string = resultPair[0];
   const output: string = resultPair[1];
+  const label = TEXT_input_output_pair_accessible_name + " " + inputSubmissionCount
+  inputSubmissionCount++;
   return (
-    <div className={"result-pair-"+commandInput} aria-label={TEXT_input_output_pair_accessible_name}>
+    <div className={"result-pair-"+commandInput} aria-label={label}>
       <p>Command: {commandInput}</p>
       <p>Output: {output}</p>
     </div>
