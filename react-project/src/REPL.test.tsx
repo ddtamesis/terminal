@@ -149,6 +149,10 @@ test('submitting 2 different stats requests', async () => {
 //     expect(statsResult1).toBeInTheDocument()
 // })
 
+
+
+// TO DO...
+
 // tests 2 get requests in a row
 // tests successful weather coordinates
 // tests invalid weather coordinates
