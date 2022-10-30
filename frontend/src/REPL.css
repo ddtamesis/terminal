@@ -1,0 +1,33 @@
+.repl {
+    position:relative;
+    background-color:white;
+    min-height:95vh;    
+}
+
+.repl-history {      
+    height:85vh;   
+    margin: auto;
+    display: block;
+    overflow: scroll;   
+    text-align: left; 
+}
+
+.new-command-input {
+    background-color:#6dbbf6;
+}
+
+.repl-input {        
+    margin: auto;    
+    height:5vh;
+}
+
+.repl-command-box {
+    width: 90%;            
+    margin: auto;
+    vertical-align: middle;
+}
+
+button {
+    margin: auto;
+    display: block;
+}
