@@ -1,4 +1,4 @@
-import {REPLFunction} from "./REPLInterface"
+import {REPLFunction} from "../REPL"
 const URL = `http://localhost:3232/`
 
 

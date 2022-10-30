@@ -1,4 +1,3 @@
-import { REPLFunction } from './handlers/REPLInterface';
 import { getHandler } from './handlers/GetHandler';
 import { weatherHandler } from './handlers/WeatherHandler';
 import { statsHandler } from './handlers/StatsHandler';
@@ -12,24 +11,52 @@ export const TEXT_submit_button_text = "Submit!"
 export const TEXT_input_output_pair_accessible_name = "your command and the outputted result"
 export const TEXT_repl_command_history_accessible_name = "command history"
 
+/**
+ * A command-processor function for our REPL. The function returns a Promise   
+ * which resolves to a string, which is the value to print to history when 
+ * the command is done executing.
+ * 
+ * The arguments passed in the input (which need not be named "args") should 
+ * *NOT*contain the command-name prefix. 
+ */
+ export interface REPLFunction {    
+  (args: Array<string>): Promise<string>
+}
 
+/**
+ * A dictionary that stores the command name and associated REPLFunction to be executed when the command is submitted
+ */
 let commandDict = new Map<string, REPLFunction>(); 
 addCommandToDict("get", getHandler);
 addCommandToDict("stats", statsHandler);
 addCommandToDict("weather", weatherHandler);
 
+// a boolean to track whether stats can run
 let csvLoaded = false;
 
+/**
+ * Adds command to the command dictionary
+ * @param command - the command name
+ * @param funct - the associated REPLFunction to invoke
+ */
 function addCommandToDict(command : string, funct : REPLFunction) {
   commandDict.set(command, funct)
 }
 
+/**
+ * Properties of repl input
+ */
 interface ReplInputProps {
   commandWithArgs: string,
   setCommand: Dispatch<SetStateAction<string>>,
   ariaLabel: string
 }
 
+/**
+ * Creates the input textbox for the repl input to be entered
+ * @param param0 - an object with repl input props
+ * @returns an HTMLInputElement
+ */
 function ReplInput({commandWithArgs, setCommand, ariaLabel}: ReplInputProps) {
   return (
     <input value={commandWithArgs}
@@ -42,11 +69,19 @@ function ReplInput({commandWithArgs, setCommand, ariaLabel}: ReplInputProps) {
   )
 }
 
+/**
+ * Properties of new command input
+ */
 interface NewCommandProps {
   addCommand: (command: string) => void;
 }
 
-
+/**
+ * Updates the new command input element according to new commands entered
+ * 
+ * @param param0 - an object with new command properties
+ * @returns - a new-command-input div
+ */
 function NewCommand({addCommand}: NewCommandProps) {
   const [input, setInputValue] = useState('');
 
@@ -94,10 +129,19 @@ function NewCommand({addCommand}: NewCommandProps) {
     }
   }
 
+  /**
+   * Properties for command history
+   */
 interface ReplHistoryProps {
   resultPair: string[]
 }
 
+/**
+ * Updates the command history to with a command/output pair div
+ * 
+ * @param param0 - an object with repl history properties
+ * @returns - result-pair div for the given command
+ */
 function UpdateHistory({resultPair}: ReplHistoryProps) {
   const commandInput: string = resultPair[0];
   const output: string = resultPair[1];
@@ -110,6 +154,11 @@ function UpdateHistory({resultPair}: ReplHistoryProps) {
   );  
 }
 
+/**
+ * Renders the REPL and creates the state changes for the REPL as commands are entered.
+ * 
+ * @returns the updated REPL component
+ */
 export default function REPL() {
   const [resultPairs, setResultPairs] = useState<string[][]>([]);
 
