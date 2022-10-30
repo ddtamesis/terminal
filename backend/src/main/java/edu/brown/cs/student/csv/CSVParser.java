@@ -76,6 +76,9 @@ public class CSVParser<T> implements Parser<List<T>> {
       this.rowCount++;
 
       String[] words = row.split("[\\s,]+");
+      if (words.length != this.columnTitles.length) {
+        throw new FactoryFailureException(List.of(words));
+      }
       for (String word : words) {
         if (!word.isEmpty()) {
           this.wordCount++;
