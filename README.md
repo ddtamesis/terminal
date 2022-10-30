@@ -43,25 +43,8 @@ None
 ### Building and Running the Program
 - Remember that it is essential to run the backend server prior to running the frontend. Again, our preferred method is to run the ```Server.main()``` method in ```IntelliJ``` to start the server. 
 - Then, navigate to the ```frontend``` directory and run ```npm start``` to build and run the terminal in a web browser.
-- [insert instructions for our commands here]
-- The ```loadcsv``` get request can be used to load the contents of a csv file, given a ```filepath``` parameter. 
-Run ```localhost:3232/loadcsv?filepath=<the path to your file>``` in the browser.
-  - Note: For security purposes, our program limits access to contents within the ```data``` folder of the project. Thus, your file path should start with ```data```.
-  - For example, ```localhost:3232/loadcsv?filepath=data/testing/test-basic.csv``` will return the following Web API response: ```{"result":"success","filepath":"data/testing/test-basic.csv"}```
-  - The following errors may occur:
-    - An ```error_bad_request``` response will be returned if your request is missing the ```filepath``` field. This could look like:
-      - ```localhost:3232/loadcsv```
-      - ```localhost:3232/loadcsv?filepath=```
-      - ```localhost:3232/loadcsv?parameternametypo=```
-    - An ```error_datasource``` response will be returned if the file could not be found at the provided ```filepath```, 
-    or if you are trying to access a directory ourside of ```data```. This could look like:
-      - ```localhost:3232/loadcsv?filepath=data/typo-in-file-name.csv```
-      - ```localhost:3232/loadcsv?filepath=Users/username/Documents/private.csv```
-- Run ```localhost:3232/getcsv``` _following a loadcsv request_ to get the contents of the most recently loaded csv.
-  - For example, if I call this after the example ```loadcsv``` request above, the following Web API response will be returned:
-    ```{"result":"success","data":[["Joe","12","Male"],["Sue","1","Female"],["Derek","17","Male"],["Quinn","20","Female"]]}```
-    - An ```error_datasource``` response will be returned if no csv has been loaded.
-    - Note: If you try to load a new csv datasource, but it fails for some reason, a subsequent ```getcsv``` request will return the most recent successfully loaded csv's content.
-- To get the temperature of a specific place in the United States, run ```localhost:3232/weather?lat=<latitude>&lon=<longitude>``` in your browser after starting the local server.  
-  - For example, a succesful weather API response outputs ```{"result":"success","lat":41.8268,"lon":-71.4029,"temperature":66}```
-  - If you pass invalid coordinates (meaning the NWS API doesn't provide forecasts or temperatures for that coordinate location), the API will output ```{"result":"error_bad_json"}```
+- The ```get``` command will return the contents of a csv file, given a ```filepath``` argument. Submit ```get <csvfilepath>``` in the command input box to get the contents.
+  - Note: For security purposes, our program limits access to contents within the ```data``` folder of the ```backend``` directory. Thus, your file path should start with ```data```.
+- The ```stats``` command outputs the number of rows and columns of the most recently loaded csv file. You must submit a successful get command before submitting this command.
+  - Note: Our terminal stores the most recently loaded csv to calculate the stats, so if you submit a successful ```get``` command, followed by an unsuccessful ```get command``` or some other command, a subsequent ```stats``` request will output the stats of the most recent successfully loaded csv file.
+- The ```weather``` command outputs the current temperature at a given location in the United States, given the latitude and longitude coordinates. This would look like: ```weather <lat> <lon>```. Note that the National Weather Service (NWS) API used to handle this request cannot handle coordinates with more precision than 4 decimal points.
