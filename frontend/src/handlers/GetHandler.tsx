@@ -20,12 +20,12 @@ getHandler = function(args: Array<string>): Promise<string>  {
             const loadCSVURL : string = `${URL}loadcsv?filepath=${args[0]}`
             return fetch(loadCSVURL).then(response => response.json())
             .then(response => {
-                if(response.result == "success") {
+                if(response.result === "success") {
                     const getCSVURL = `${URL}getcsv`;
                     fetch(getCSVURL)
                          .then(r => r.json())
                             .then(response => {
-                            if (response.result=="success") {
+                            if (response.result==="success") {
                                 return resolve(JSON.stringify(JSON.parse(JSON.stringify(response.data))));
                             }       
                                 else {

@@ -113,16 +113,16 @@ function NewCommand({addCommand}: NewCommandProps) {
   if (commandDict.has(comm)) {
     const myFunc : REPLFunction | undefined = commandDict.get(comm);
 
-    if (myFunc == undefined) {
+    if (myFunc === undefined) {
       return Promise.resolve(comm + "'s function is undefined.")
     }
-    if (myFunc == getHandler) {
+    if ((myFunc === getHandler)) {
       csvLoaded = true;
     }
-    if (myFunc == statsHandler && !csvLoaded) {
+    if (myFunc === statsHandler && !csvLoaded) {
       return Promise.resolve('Please load a csv with "get <filepath>" before calling stats.')
     }
-    
+
     return myFunc(commandArgs);
   } else {
     return Promise.resolve(comm + " does not exist.");

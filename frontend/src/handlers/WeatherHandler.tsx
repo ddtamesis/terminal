@@ -7,7 +7,7 @@ import { REPLFunction } from "../REPL";
  */
 export let weatherHandler: REPLFunction = (args: Array<string>): Promise<string> => {
     // if the correct number of arguments are passed in, fetch request from backend server
-    if (args.length == 2) {
+    if (args.length === 2) {
         const lat: string = args[0];
         const lon: string = args[1];
         const promise: Promise<string> = fetch(`http://localhost:3232/weather?lat=${lat}&lon=${lon}`)
