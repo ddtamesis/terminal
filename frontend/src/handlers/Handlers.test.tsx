@@ -32,7 +32,7 @@ test("get doesn't work with too many arguments", async () => {
  */
 test("get doesn't work with invalid csv", async () => {
     let promiseObj : Promise<string> = getHandler(["data/testing/test-invalid.csv"])
-    return promiseObj.then((response: String) => expect(response).toBe("Unable to properly load file. Ensure the file path is valid."))
+    return promiseObj.then((response: String) => expect(response).toBe("Ensure csv is properly formatted."))
 }
 )
 

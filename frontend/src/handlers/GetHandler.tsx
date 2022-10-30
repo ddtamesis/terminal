@@ -36,7 +36,7 @@ getHandler = function(args: Array<string>): Promise<string>  {
                 else {
                     resolve("Unable to properly load file. Ensure the file path is valid.")
                 }
-        })
+        }).catch(e => resolve("Ensure csv is properly formatted."))
     }
 }
     )

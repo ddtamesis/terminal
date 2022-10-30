@@ -187,12 +187,12 @@ test('weather without coordinates', async () => {
    userEvent.type(inputBox, 'weather');
    userEvent.click(submitButton);
 
-//    const commandHistory = await screen.findByRole(/.*/, {name: TEXT_repl_command_history_accessible_name});
-//    const commandOutputPair = await within(commandHistory).findByRole(/.*/, {name: TEXT_input_output_pair_accessible_name});
-//    expect(commandOutputPair).toBeInTheDocument();
+   const commandHistory = await screen.findByRole(/.*/, {name: TEXT_repl_command_history_accessible_name});
+   const commandOutputPair = await within(commandHistory).findByRole(/.*/, {name: TEXT_input_output_pair_accessible_name});
+   expect(commandOutputPair).toBeInTheDocument();
  
-//    const outputElement: HTMLElement = await within(commandOutputPair).findByRole("output")
-//    expect(outputElement.innerHTML).toBe('Output: Invalid arguments. Please enter weather &lt;lat&gt; &lt;lon&gt;')
+   const outputElement: HTMLElement = await within(commandOutputPair).findByRole("output")
+   expect(outputElement.innerHTML).toBe('Output: Invalid arguments. Please enter weather &lt;lat&gt; &lt;lon&gt;')
 
   // const invalidResponse = await screen.findByText("Output: Invalid arguments. Please enter weather &lt;lat&gt; &lt;lon&gt;")
   // expect(invalidResponse).toBeInTheDocument()
@@ -211,7 +211,7 @@ test('two weather requests in a row', async () => {
    userEvent.type(inputBox, 'weather 39.7456 -97.0892');
    userEvent.click(submitButton);
  
-   const waitForSecondWeather = await screen.findByText("Command: weather 39.7456 -97.0892")
+   await screen.findByText("Command: weather 39.7456 -97.0892")
    const commandHistory = await screen.findByRole(/.*/, {name: TEXT_repl_command_history_accessible_name})
    const commandOutputPair = await within(commandHistory).findAllByRole(/.*/, {name: TEXT_input_output_pair_accessible_name});
    expect(commandOutputPair).toHaveLength(2)
