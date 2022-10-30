@@ -186,6 +186,14 @@ test('weather without coordinates', async () => {
    const submitButton = screen.getByRole("button", {name: TEXT_submit_button_accessible_name});
    userEvent.type(inputBox, 'weather');
    userEvent.click(submitButton);
+
+//    const commandHistory = await screen.findByRole(/.*/, {name: TEXT_repl_command_history_accessible_name});
+//    const commandOutputPair = await within(commandHistory).findByRole(/.*/, {name: TEXT_input_output_pair_accessible_name});
+//    expect(commandOutputPair).toBeInTheDocument();
+ 
+//    const outputElement: HTMLElement = await within(commandOutputPair).findByRole("output")
+//    expect(outputElement.innerHTML).toBe('Output: Invalid arguments. Please enter weather &lt;lat&gt; &lt;lon&gt;')
+
   // const invalidResponse = await screen.findByText("Output: Invalid arguments. Please enter weather &lt;lat&gt; &lt;lon&gt;")
   // expect(invalidResponse).toBeInTheDocument()
 })
