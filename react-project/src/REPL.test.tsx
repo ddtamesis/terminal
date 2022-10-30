@@ -6,10 +6,6 @@ import REPL, { TEXT_input_box_accessible_name, TEXT_input_text_accessible_name,
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 
-// beforeEach(() => {
-//     render(<REPL />)
-//   })
-
 test('renders command history', () => {
     render(<REPL />)
     const commandHistory = screen.getByLabelText(TEXT_repl_command_history_accessible_name);
@@ -61,7 +57,7 @@ test('submitting 1 successful get command', async () => {
     expect(outputElement.innerHTML).toBe('Output: [["Joe","12","Male"],["Sue","1","Female"],["Derek","17","Male"],["Quinn","20","Female"]]')
 })
 
-test('submitting get followed by stats', async () => {
+test('submitting successful get followed by successful stats', async () => {
     render(<REPL />)
     const inputBox = screen.getByRole("textbox", {name: TEXT_input_text_accessible_name});
     const submitButton = screen.getByRole("button", {name: TEXT_submit_button_accessible_name});
@@ -69,12 +65,14 @@ test('submitting get followed by stats', async () => {
     userEvent.type(inputBox, 'get data/testing/test-basic.csv');
     userEvent.click(submitButton);
     let allResults = await screen.findAllByRole("group", {name: TEXT_input_output_pair_accessible_name})
-    expect(allResults).toHaveLength(1)
     
     userEvent.type(inputBox, 'stats');
     userEvent.click(submitButton);
     allResults = await screen.findAllByRole("group", {name: TEXT_input_output_pair_accessible_name})
-    expect(allResults).toHaveLength(2)
+
+    allResults.forEach(elt => {
+        expect(elt).toBeInTheDocument;
+    })
 
     const statsResult = await screen.findByText("Output: Rows: 4, Columns: 3")
     expect(statsResult).toBeInTheDocument()
