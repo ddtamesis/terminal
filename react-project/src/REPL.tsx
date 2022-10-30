@@ -103,7 +103,7 @@ function UpdateHistory({resultPair}: ReplHistoryProps) {
   const output: string = resultPair[1];
   const label = TEXT_input_output_pair_accessible_name
   return (
-    <div className={"result-pair-"+commandInput} aria-label={label}>
+    <div className={"result-pair-"+commandInput} aria-label={label} role="group">
       <p role="command">Command: {commandInput}</p>
       <p role="output">Output: {output}</p>
     </div>
