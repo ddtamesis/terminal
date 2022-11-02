@@ -31,3 +31,19 @@ statsHandler = function(args: Array<string>): Promise<string>  {
         return Promise.resolve("Invalid arguments. Please only enter 'stats'")
     }
 }
+
+export let mockedStatsHandler : REPLFunction;
+
+/**
+ * Mocked stats handler for our mocked get handler, which corresponds to 
+ * the csv test-basic.csv
+ */
+mockedStatsHandler = function(args: Array<string>): Promise<string>  {
+    if (args.length === 0) {
+        return Promise.resolve("Rows: 4, Columns: 3")
+    } else {
+        return Promise.resolve("Invalid arguments. Please only enter 'stats'")
+    }
+}
+
+
