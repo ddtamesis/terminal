@@ -1,6 +1,6 @@
-import { getHandler } from './handlers/GetHandler';
-import { weatherHandler } from './handlers/WeatherHandler';
-import { statsHandler } from './handlers/StatsHandler';
+import { getHandler, mockedGetHandler } from './handlers/GetHandler';
+import { weatherHandler, mockedWeatherHandler } from './handlers/WeatherHandler';
+import { statsHandler, mockedStatsHandler } from './handlers/StatsHandler';
 
 import React, { useState, Dispatch, SetStateAction } from 'react';
 import './REPL.css'
@@ -30,6 +30,12 @@ let commandDict = new Map<string, REPLFunction>();
 addCommandToDict("get", getHandler);
 addCommandToDict("stats", statsHandler);
 addCommandToDict("weather", weatherHandler);
+
+//adding out mocked handlers
+addCommandToDict("mockedWeather", mockedWeatherHandler);
+addCommandToDict("mockedGet", mockedGetHandler);
+addCommandToDict("mockedStats", mockedStatsHandler);
+
 
 // a boolean to track whether stats can run
 let csvLoaded = false;
@@ -116,15 +122,18 @@ function NewCommand({addCommand}: NewCommandProps) {
     if (myFunc === undefined) {
       return Promise.resolve(comm + "'s function is undefined.")
     }
-    if ((myFunc === getHandler)) {
+    if ((myFunc === getHandler) || (myFunc == mockedGetHandler))
+    {
       csvLoaded = true;
+
     }
-    if (myFunc === statsHandler && !csvLoaded) {
+    if (((myFunc === statsHandler) || (myFunc === mockedStatsHandler)) && !csvLoaded) {
       return Promise.resolve('Please load a csv with "get <filepath>" before calling stats.')
     }
 
     return myFunc(commandArgs);
   } else {
+
     return Promise.resolve(comm + " does not exist.");
     }
   }
