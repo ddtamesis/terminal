@@ -3,7 +3,7 @@ dtamesis-mtahir1 team's sprint-3 repo
 
 ## **Project Details**
 
-**Project Name**: Sprint 3 - Terminal 
+**Project Name**: Terminal 
 
 **Estimated Time to Complete Project**: 20 hrs 
 
